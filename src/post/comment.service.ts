@@ -17,7 +17,7 @@ export class CommentService {
     const post: PostEntity = await this.postRepository.findOne(postId);
     const newComment: CommentEntity = this.commentRepository.create({
       ...comment,
-      post
+      post,
     });
     return this.commentRepository.save(newComment);
   }

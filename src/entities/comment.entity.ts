@@ -15,6 +15,9 @@ export class CommentEntity {
   @Column()
   content: string;
 
-  @ManyToOne(() => PostEntity, post => post.comments)
+  @ManyToOne(
+    () => PostEntity,
+    post => post.comments
+  )
   post: PostEntity;
 }

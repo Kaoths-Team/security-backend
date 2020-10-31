@@ -17,14 +17,17 @@ export class PostService {
 
   async findAll(includeComments?: boolean): Promise<PostEntity[]> {
     if (includeComments && includeComments === true) {
-      return this.postRepository.find( { relations: ["comments"] })
+      return this.postRepository.find({ relations: ['comments'] });
     }
-    return this.postRepository.find()
+    return this.postRepository.find();
   }
 
-  async findById(postId: string, includeComments?: boolean): Promise<PostEntity> {
+  async findById(
+    postId: string,
+    includeComments?: boolean
+  ): Promise<PostEntity> {
     if (includeComments && includeComments === true) {
-      return this.postRepository.findOne(postId, { relations: ["comments"] })
+      return this.postRepository.findOne(postId, { relations: ['comments'] });
     }
     return this.postRepository.findOne(postId);
   }

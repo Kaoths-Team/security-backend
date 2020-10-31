@@ -15,6 +15,9 @@ export class PostEntity {
   @Column()
   content: string;
 
-  @OneToMany(() => CommentEntity, comment => comment.post)
+  @OneToMany(
+    () => CommentEntity,
+    comment => comment.post
+  )
   comments: CommentEntity[];
 }

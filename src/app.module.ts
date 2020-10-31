@@ -12,29 +12,28 @@ import configuration from './config/configuration';
   imports: [
     ConfigModule.forRoot({
       load: [configuration],
-      isGlobal: true
+      isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
-      imports: [ ConfigModule ],
-      inject: [ ConfigService ],
+      imports: [ConfigModule],
+      inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         type: 'mysql',
-        host: configService.get<string>("db.host"),
-        port: configService.get<number>("db.port"),
-        username: configService.get<string>("db.username"),
-        password: configService.get<string>("db.password"),
-        database: configService.get<string>("db.database"),
+        host: configService.get<string>('db.host'),
+        port: configService.get<number>('db.port'),
+        username: configService.get<string>('db.username'),
+        password: configService.get<string>('db.password'),
+        database: configService.get<string>('db.database'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: true,
-        timezone: 'utc+7'
+        timezone: 'utc+7',
       }),
     }),
     PostModule,
     AuthModule,
     UserModule,
   ],
-  controllers: [ AppController ],
-  providers: [ AppService ],
+  controllers: [AppController],
+  providers: [AppService],
 })
-export class AppModule {
-}
+export class AppModule {}

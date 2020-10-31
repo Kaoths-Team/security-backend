@@ -10,15 +10,15 @@ import { JwtStrategy } from './jwt.strategy';
   imports: [
     PassportModule.register({
       defaultStrategy: 'jwt',
-      property: 'user'
+      property: 'user',
     }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>("jwt.secret"),
+        secret: configService.get<string>('jwt.secret'),
         signOptions: {
-          expiresIn: "60d",
+          expiresIn: '60d',
         },
       }),
     }),
@@ -26,6 +26,5 @@ import { JwtStrategy } from './jwt.strategy';
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
   exports: [PassportModule, JwtModule, AuthService],
-
 })
 export class AuthModule {}

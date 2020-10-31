@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '../entities/user.entity';
 import { Repository } from 'typeorm';
-import { hashSync } from "bcryptjs";
+import { hashSync } from 'bcryptjs';
 
 @Injectable()
 export class UserService {
@@ -16,15 +16,15 @@ export class UserService {
   }
 
   async findOne(conditions): Promise<UserEntity> {
-    return this.userRepository.findOne(conditions)
+    return this.userRepository.findOne(conditions);
   }
 
   async findByUsernameWithPassword(username: string): Promise<UserEntity> {
     return this.userRepository
       .createQueryBuilder()
-      .where("username = :username",  { username })
-      .addSelect("password", "UserEntity_password")
-      .getOne()
+      .where('username = :username', { username })
+      .addSelect('password', 'UserEntity_password')
+      .getOne();
   }
 
   async findById(id: string): Promise<UserEntity> {
@@ -33,7 +33,7 @@ export class UserService {
 
   async create({ password, ...userDto }: UserEntity): Promise<UserEntity> {
     password = hashSync(password, 12);
-    const newUser =  this.userRepository.create({ ...userDto, password });
+    const newUser = this.userRepository.create({ ...userDto, password });
     return this.userRepository.save(newUser);
   }
 }
