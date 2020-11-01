@@ -1,0 +1,58 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Deploy staging
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Test code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup nodejs
+        uses: actions/setup-node@v2
+        with:
+          node-version: '12'
+      - name: Install dependencies
+        run: yarn
+      - name: Run test
+        run: yarn test
+  build_and_deploy:
+    name: Build and Deploy to GCR
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Nodejs
+        uses: actions/setup-node@v2
+        with:
+          node-version: '12'
+      - name: Build docker image
+        run: docker build -t gcr.io/${{ secrets.GOOGLE_PROJECT_ID }}/security-blog-backend .
+      - name: Create .env
+        run: |
+          cat > .env << EOF1
+          NODE_ENV=staging
+          DB_HOST=${{ secrets.DB_HOST }}
+          DB_POST=${{ secrets.DB_PORT }}
+          DB_DATABASE=${{ secrets.DB_DATABASE }}
+          DB_USERNAME=${{ secrets.DB_USERNAME }}
+          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+          JWT_SECRET=${{ secrets.JWT_SECRET }}
+          EOF1
+      - name: Deploy to GCR
+        uses: stefda/action-cloud-run@v1.0
+        with:
+          image: gcr.io/${{ secrets.GOOGLE_PROJECT_ID }}/security-blog-backend
+          service: security-blog-backend
+          project: ${{ secrets.GOOGLE_PROJECT_ID }}
+          region: asia-southeast1
+          env: .env
+          service key: ${{ secrets.STAGING_GCLOUD_SERVICE_KEY_BASE64 }}
