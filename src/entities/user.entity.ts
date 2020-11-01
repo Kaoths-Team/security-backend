@@ -22,13 +22,13 @@ export class UserEntity {
 
   @OneToMany(
     () => PostEntity,
-    post => post.author,
+    post => post.author
   )
   posts: PostEntity[];
 
   @OneToMany(
     () => CommentEntity,
-    comment => comment.author,
+    comment => comment.author
   )
   comments: CommentEntity[];
 }

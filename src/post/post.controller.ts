@@ -11,8 +11,6 @@ import {
 import { PostService } from './post.service';
 import { PostEntity } from '../entities/post.entity';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { CommentEntity } from '../entities/comment.entity';
-import { CommentService } from '../comment/comment.service';
 import { User } from '../decorator/user.decorator';
 import { UserEntity } from '../entities/user.entity';
 
