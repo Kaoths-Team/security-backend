@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { CommentEntity } from '../entities/comment.entity';
 import { PostEntity } from '../entities/post.entity';
 import { UserEntity } from '../entities/user.entity';
+import { CreateCommentDto } from './comment.dto';
 
 @Injectable()
 export class CommentService {
@@ -18,8 +19,7 @@ export class CommentService {
 
   async create(
     userId: number,
-    postId: number,
-    comment: CommentEntity
+    { postId, ...comment }: CreateCommentDto
   ): Promise<CommentEntity> {
     const post: PostEntity = await this.postRepository.findOne(postId);
     const user: UserEntity = await this.userRepository.findOne(userId);

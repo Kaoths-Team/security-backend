@@ -30,12 +30,16 @@ export class PostService {
   }
 
   async findById(
-    postId: string,
+    postId: number,
     includeComments?: boolean
   ): Promise<PostEntity> {
     if (includeComments && includeComments === true) {
       return this.postRepository.findOne(postId, { relations: ['comments'] });
     }
     return this.postRepository.findOne(postId);
+  }
+
+  async deletePost(postId: number): Promise<void> {
+    await this.postRepository.delete(postId);
   }
 }

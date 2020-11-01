@@ -18,14 +18,15 @@ export class CommentEntity {
 
   @ManyToOne(
     () => PostEntity,
-    post => post.comments
+    post => post.comments,
+    { onDelete: 'CASCADE' }
   )
   post: PostEntity;
 
   @ManyToOne(
     () => UserEntity,
     user => user.comments,
-    { eager: true }
+    { eager: true, onDelete: 'SET NULL' }
   )
   author: UserEntity;
 }

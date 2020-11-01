@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -11,7 +12,7 @@ import { PostService } from './post.service';
 import { PostEntity } from '../entities/post.entity';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { CommentEntity } from '../entities/comment.entity';
-import { CommentService } from './comment.service';
+import { CommentService } from '../comment/comment.service';
 import { User } from '../decorator/user.decorator';
 import { UserEntity } from '../entities/user.entity';
 
@@ -19,10 +20,7 @@ import { UserEntity } from '../entities/user.entity';
 @ApiTags('Post')
 @Controller('post')
 export class PostController {
-  constructor(
-    private readonly postService: PostService,
-    private readonly commentService: CommentService
-  ) {}
+  constructor(private readonly postService: PostService) {}
 
   @Post()
   async createPost(
@@ -57,7 +55,7 @@ export class PostController {
     required: false,
   })
   async getPost(
-    @Param('id') postId: string,
+    @Param('id', ParseIntPipe) postId: number,
     @Query('comments') comments: string
   ): Promise<PostEntity> {
     if (comments) {
@@ -67,12 +65,11 @@ export class PostController {
     return this.postService.findById(postId);
   }
 
-  @Post(':id/comment')
-  async createComment(
+  @Delete(':id')
+  async deletePost(
     @User() user: UserEntity,
-    @Param('id', ParseIntPipe) postId: number,
-    @Body() comment: CommentEntity
-  ): Promise<CommentEntity> {
-    return this.commentService.create(user.id, postId, comment);
+    @Param('id', ParseIntPipe) postId: number
+  ): Promise<void> {
+    return this.postService.deletePost(postId);
   }
 }

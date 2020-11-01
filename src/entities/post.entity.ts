@@ -24,15 +24,14 @@ export class PostEntity {
 
   @OneToMany(
     () => CommentEntity,
-    comment => comment.post,
-    { onDelete: 'CASCADE' }
+    comment => comment.post
   )
   comments: CommentEntity[];
 
   @ManyToOne(
     () => UserEntity,
     user => user.posts,
-    { eager: true }
+    { eager: true, onDelete: 'SET NULL' }
   )
   author: UserEntity;
 }
