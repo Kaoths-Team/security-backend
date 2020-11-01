@@ -1,4 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
+  DeleteDateColumn,
+} from 'typeorm';
 import { PostEntity } from './post.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { UserEntity } from './user.entity';
@@ -29,4 +37,13 @@ export class CommentEntity {
     { eager: true, onDelete: 'SET NULL' }
   )
   author: UserEntity;
+
+  @CreateDateColumn({ readonly: true })
+  createdAt!: Date;
+
+  @UpdateDateColumn({ readonly: true })
+  updatedAt!: Date;
+
+  @DeleteDateColumn({ readonly: true })
+  deletedAt!: Date;
 }

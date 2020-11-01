@@ -35,9 +35,7 @@ export class PostController {
     allowEmptyValue: true,
     required: false,
   })
-  async getAllPosts(
-    @Query('comments') comments: string
-  ): Promise<PostEntity[]> {
+  async getAllPosts(@Query('comments') comments: string): Promise<PostEntity[]> {
     if (comments) {
       const includeComments = comments === 'true';
       return this.postService.findAll(includeComments);

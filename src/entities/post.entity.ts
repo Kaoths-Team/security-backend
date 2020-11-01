@@ -4,6 +4,9 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
+  DeleteDateColumn,
 } from 'typeorm';
 import { CommentEntity } from './comment.entity';
 import { ApiProperty } from '@nestjs/swagger';
@@ -34,4 +37,13 @@ export class PostEntity {
     { eager: true, onDelete: 'SET NULL' }
   )
   author: UserEntity;
+
+  @CreateDateColumn({ readonly: true })
+  createdAt!: Date;
+
+  @UpdateDateColumn({ readonly: true })
+  updatedAt!: Date;
+
+  @DeleteDateColumn({ readonly: true })
+  deletedAt!: Date;
 }

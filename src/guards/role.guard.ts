@@ -1,9 +1,4 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  Inject,
-  Injectable,
-} from '@nestjs/common';
+import { CanActivate, ExecutionContext, Inject, Injectable } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { Reflector } from '@nestjs/core';
 import { UserEntity } from '../entities/user.entity';

@@ -30,10 +30,7 @@ export class PostService {
     return this.postRepository.find();
   }
 
-  async findById(
-    postId: number,
-    includeComments?: boolean
-  ): Promise<PostEntity> {
+  async findById(postId: number, includeComments?: boolean): Promise<PostEntity> {
     if (includeComments && includeComments === true) {
       return this.postRepository.findOne(postId, { relations: ['comments'] });
     }
