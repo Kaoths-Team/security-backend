@@ -68,6 +68,6 @@ export class PostController {
     @User() user: UserEntity,
     @Param('id', ParseIntPipe) postId: number
   ): Promise<void> {
-    return this.postService.deletePost(postId);
+    return this.postService.deletePost(user.id, postId);
   }
 }
