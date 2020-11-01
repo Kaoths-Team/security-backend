@@ -23,14 +23,12 @@ export class UserEntity {
   @OneToMany(
     () => PostEntity,
     post => post.author,
-    { onDelete: 'CASCADE' }
   )
   posts: PostEntity[];
 
   @OneToMany(
     () => CommentEntity,
     comment => comment.author,
-    { onDelete: 'CASCADE' }
   )
   comments: CommentEntity[];
 }
