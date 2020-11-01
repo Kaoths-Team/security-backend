@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CommentEntity } from '../entities/comment.entity';
 import { PostEntity } from '../entities/post.entity';
 import { UserEntity } from '../entities/user.entity';
 import { CreateCommentDto } from './comment.dto';
+import { UserRole } from '../user/user.dto';
 
 @Injectable()
 export class CommentService {
@@ -16,6 +17,10 @@ export class CommentService {
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>
   ) {}
+
+  async findById(id: number): Promise<CommentEntity> {
+    return this.commentRepository.findOne(id);
+  }
 
   async create(
     userId: number,
@@ -29,5 +34,13 @@ export class CommentService {
       author: user,
     });
     return this.commentRepository.save(newComment);
+  }
+
+  async deleteComment(user: UserEntity, commentId: number): Promise<void> {
+    const comment: CommentEntity = await this.findById(commentId);
+    if (user.role !== UserRole.Admin && comment.author.id !== user.id) {
+      throw new BadRequestException('You are not author of this comment');
+    }
+    await this.commentRepository.delete(commentId);
   }
 }

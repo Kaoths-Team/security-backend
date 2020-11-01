@@ -1,12 +1,9 @@
-import {
-  BadRequestException,
-  ForbiddenException,
-  Injectable,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PostEntity } from '../entities/post.entity';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
+import { UserRole } from '../user/user.dto';
 
 @Injectable()
 export class PostService {
@@ -43,9 +40,9 @@ export class PostService {
     return this.postRepository.findOne(postId);
   }
 
-  async deletePost(userId: number, postId: number): Promise<void> {
+  async deletePost(user: UserEntity, postId: number): Promise<void> {
     const post: PostEntity = await this.findById(postId);
-    if (post.author.id !== userId) {
+    if (user.role !== UserRole.Admin && post.author.id !== user.id) {
       throw new BadRequestException('You are not author of this post');
     }
     await this.postRepository.delete(postId);
