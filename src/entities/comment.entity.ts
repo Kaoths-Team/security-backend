@@ -1,6 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { PostEntity } from './post.entity';
 import { ApiProperty } from '@nestjs/swagger';
+import { UserEntity } from './user.entity';
 
 @Entity()
 export class CommentEntity {
@@ -20,4 +21,11 @@ export class CommentEntity {
     post => post.comments
   )
   post: PostEntity;
+
+  @ManyToOne(
+    () => UserEntity,
+    user => user.comments,
+    { eager: true }
+  )
+  author: UserEntity;
 }

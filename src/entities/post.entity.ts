@@ -1,6 +1,13 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  ManyToOne,
+} from 'typeorm';
 import { CommentEntity } from './comment.entity';
 import { ApiProperty } from '@nestjs/swagger';
+import { UserEntity } from './user.entity';
 
 @Entity()
 export class PostEntity {
@@ -17,7 +24,15 @@ export class PostEntity {
 
   @OneToMany(
     () => CommentEntity,
-    comment => comment.post
+    comment => comment.post,
+    { onDelete: 'CASCADE' }
   )
   comments: CommentEntity[];
+
+  @ManyToOne(
+    () => UserEntity,
+    user => user.posts,
+    { eager: true }
+  )
+  author: UserEntity;
 }

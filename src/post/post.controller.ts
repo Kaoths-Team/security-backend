@@ -1,9 +1,19 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { PostService } from './post.service';
 import { PostEntity } from '../entities/post.entity';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { CommentEntity } from '../entities/comment.entity';
 import { CommentService } from './comment.service';
+import { User } from '../decorator/user.decorator';
+import { UserEntity } from '../entities/user.entity';
 
 @ApiBearerAuth()
 @ApiTags('Post')
@@ -15,8 +25,11 @@ export class PostController {
   ) {}
 
   @Post()
-  async createPost(@Body() post: PostEntity): Promise<PostEntity> {
-    return this.postService.create(post);
+  async createPost(
+    @User() user: UserEntity,
+    @Body() post: PostEntity
+  ): Promise<PostEntity> {
+    return this.postService.create(user.id, post);
   }
 
   @Get()
@@ -56,9 +69,10 @@ export class PostController {
 
   @Post(':id/comment')
   async createComment(
-    @Param(':id') postId: string,
+    @User() user: UserEntity,
+    @Param(':id', ParseIntPipe) postId: number,
     @Body() comment: CommentEntity
   ): Promise<CommentEntity> {
-    return this.commentService.create(postId, comment);
+    return this.commentService.create(user.id, postId, comment);
   }
 }
