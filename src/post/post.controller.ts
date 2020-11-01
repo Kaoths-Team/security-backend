@@ -70,7 +70,7 @@ export class PostController {
   @Post(':id/comment')
   async createComment(
     @User() user: UserEntity,
-    @Param(':id', ParseIntPipe) postId: number,
+    @Param('id', ParseIntPipe) postId: number,
     @Body() comment: CommentEntity
   ): Promise<CommentEntity> {
     return this.commentService.create(user.id, postId, comment);
