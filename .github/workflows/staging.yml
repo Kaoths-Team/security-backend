@@ -32,6 +32,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '12'
+      - name: Install dependencies
+        run: yarn install
+      - name: Build NestJS project
+        run: yarn build
       - name: Build docker image
         run: docker build -t gcr.io/${{ secrets.GOOGLE_PROJECT_ID }}/security-blog-backend .
       - name: Create .env
