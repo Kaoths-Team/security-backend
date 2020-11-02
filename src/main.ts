@@ -4,14 +4,16 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import * as helmet from 'helmet';
 import * as rateLimit from 'express-rate-limit';
+import { XSS } from './config/security';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(helmet());
+  app.use(XSS());
   app.enableCors();
   app.use(
     rateLimit({
-      windowMs: 5 * 60 * 1000, // 5 mins
+      windowMs: 5 * 60 * 1000,
       max: 100,
     })
   );
