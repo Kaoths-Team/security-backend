@@ -4,6 +4,7 @@ import { PostEntity } from '../entities/post.entity';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
 import { UserRole } from '../user/user.dto';
+import { PostDto } from './post.dto';
 
 @Injectable()
 export class PostService {
@@ -14,7 +15,7 @@ export class PostService {
     private readonly userRepository: Repository<UserEntity>
   ) {}
 
-  async create(userId: number, post: PostEntity): Promise<PostEntity> {
+  async create(userId: number, post: PostDto): Promise<PostEntity> {
     const user: UserEntity = await this.userRepository.findOne(userId);
     const newPost: PostEntity = this.postRepository.create({
       ...post,
@@ -43,5 +44,17 @@ export class PostService {
       throw new BadRequestException('You are not author of this post');
     }
     await this.postRepository.delete(postId);
+  }
+
+  async updatePost(
+    user: UserEntity,
+    postId: number,
+    postDto: PostDto
+  ): Promise<PostEntity> {
+    const post: PostEntity = await this.findById(postId);
+    if (user.role !== UserRole.Admin && post.author.id !== user.id) {
+      throw new BadRequestException('You are not author of this post');
+    }
+    return this.postRepository.save({ ...post, ...postDto });
   }
 }

@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { CommentEntity } from '../entities/comment.entity';
 import { PostEntity } from '../entities/post.entity';
 import { UserEntity } from '../entities/user.entity';
-import { CreateCommentDto } from './comment.dto';
+import { CreateCommentDto, UpdateCommentDto } from './comment.dto';
 import { UserRole } from '../user/user.dto';
 
 @Injectable()
@@ -42,5 +42,18 @@ export class CommentService {
       throw new BadRequestException('You are not author of this comment');
     }
     await this.commentRepository.delete(commentId);
+  }
+
+  async updateComment(
+    user: UserEntity,
+    commentId: number,
+    dto: UpdateCommentDto
+  ): Promise<CommentEntity> {
+    const comment: CommentEntity = await this.findById(commentId);
+    if (user.role !== UserRole.Admin && comment.author.id !== user.id) {
+      throw new BadRequestException('You are not author of this comment');
+    }
+    await this.commentRepository.save({ ...comment, ...dto });
+    return this.findById(commentId);
   }
 }

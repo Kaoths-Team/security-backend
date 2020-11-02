@@ -1,10 +1,11 @@
-import { Body, Controller, Delete, Param, ParseIntPipe, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CommentService } from './comment.service';
 import { User } from '../decorator/user.decorator';
 import { UserEntity } from '../entities/user.entity';
 import { CommentEntity } from '../entities/comment.entity';
-import { CreateCommentDto } from './comment.dto';
+import { CreateCommentDto, UpdateCommentDto } from './comment.dto';
+import { UpdateCommand } from '@nestjs/cli/commands/update.command';
 
 @ApiBearerAuth()
 @ApiTags('Comment')
@@ -26,5 +27,14 @@ export class CommentController {
     @Param('id', ParseIntPipe) commentId: number
   ): Promise<void> {
     return this.commentService.deleteComment(user, commentId);
+  }
+
+  @Put(':id')
+  async updateComment(
+    @User() user: UserEntity,
+    @Param('id', ParseIntPipe) commentId: number,
+    @Body() dto: UpdateCommentDto
+  ): Promise<CommentEntity> {
+    return this.commentService.updateComment(user, commentId, dto);
   }
 }

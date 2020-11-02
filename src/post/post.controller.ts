@@ -6,6 +6,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Put,
   Query,
 } from '@nestjs/common';
 import { PostService } from './post.service';
@@ -13,6 +14,7 @@ import { PostEntity } from '../entities/post.entity';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { User } from '../decorator/user.decorator';
 import { UserEntity } from '../entities/user.entity';
+import { PostDto } from './post.dto';
 
 @ApiBearerAuth()
 @ApiTags('Post')
@@ -21,10 +23,7 @@ export class PostController {
   constructor(private readonly postService: PostService) {}
 
   @Post()
-  async createPost(
-    @User() user: UserEntity,
-    @Body() post: PostEntity
-  ): Promise<PostEntity> {
+  async createPost(@User() user: UserEntity, @Body() post: PostDto): Promise<PostEntity> {
     return this.postService.create(user.id, post);
   }
 
@@ -67,5 +66,14 @@ export class PostController {
     @Param('id', ParseIntPipe) postId: number
   ): Promise<void> {
     return this.postService.deletePost(user, postId);
+  }
+
+  @Put(':id')
+  async updatePost(
+    @User() user: UserEntity,
+    @Param('id', ParseIntPipe) postId: number,
+    @Body() dto: PostDto
+  ): Promise<PostEntity> {
+    return this.postService.updatePost(user, postId, dto);
   }
 }
