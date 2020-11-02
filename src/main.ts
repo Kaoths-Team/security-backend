@@ -4,7 +4,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import * as helmet from 'helmet';
 import * as rateLimit from 'express-rate-limit';
-import { XSS } from './config/security';
+import { XSS } from './middlewares/xss.middleware';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
