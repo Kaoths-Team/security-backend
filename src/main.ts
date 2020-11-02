@@ -5,10 +5,16 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import * as helmet from 'helmet';
 import * as csurf from 'csurf';
 import * as rateLimit from 'express-rate-limit';
+import * as session from 'express-session';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(helmet())
+  app.use(session({
+    secret: process.env.JWT_SECRET,
+    resave: false,
+    saveUninitialized: true,
+  }))
   app.use(csurf())
   app.use(
     rateLimit({
