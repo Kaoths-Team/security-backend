@@ -2,11 +2,23 @@ import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import * as helmet from 'helmet';
+import * as csurf from 'csurf';
+import * as rateLimit from 'express-rate-limit';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.use(helmet())
+  app.use(csurf())
+  app.use(
+    rateLimit({
+      windowMs: 5 * 60 * 1000, // 5 mins
+      max: 100,
+    }),
+  );
   app.useGlobalGuards(new JwtAuthGuard(app.get(Reflector)));
   app.enableCors();
+
 
   const options = new DocumentBuilder()
     .setTitle('Security blog project')
