@@ -11,7 +11,7 @@ async function bootstrap() {
   app.use(helmet());
   app.use(XSS());
   app.enableCors({
-    origin: 'security-blog-frontend.kaoths.dev'
+    origin: 'security-blog-frontend.netlify.app'
   });
   app.use(
     rateLimit({
