@@ -10,15 +10,15 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(helmet());
   app.use(XSS());
-  app.enableCors({
-    origin: 'security-blog-frontend.netlify.app'
-  });
   app.use(
     rateLimit({
       windowMs: 5 * 60 * 1000,
       max: 100,
     })
   );
+  app.enableCors({
+    origin: 'https://security-blog-frontend.netlify.app'
+  });
   app.useGlobalGuards(new JwtAuthGuard(app.get(Reflector)));
 
   const options = new DocumentBuilder()
