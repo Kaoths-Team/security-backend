@@ -3,23 +3,12 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import * as helmet from 'helmet';
-import * as csurf from 'csurf';
 import * as rateLimit from 'express-rate-limit';
-import * as session from 'express-session';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.use(
-    helmet({
-      permittedCrossDomainPolicies: { permittedPolicies: 'all' },
-    })
-  );
-  // app.use(session({
-  //   secret: process.env.JWT_SECRET,
-  //   resave: false,
-  //   saveUninitialized: false,
-  // }))
-  // app.use(csurf())
+  app.use(helmet());
+  app.enableCors();
   app.use(
     rateLimit({
       windowMs: 5 * 60 * 1000, // 5 mins
