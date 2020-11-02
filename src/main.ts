@@ -5,11 +5,13 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import * as helmet from 'helmet';
 import * as rateLimit from 'express-rate-limit';
 import { XSS } from './middlewares/xss.middleware';
+import { NoCache } from './middlewares/cache-control.middleware';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(helmet());
   app.use(XSS());
+  app.use(NoCache())
   app.use(
     rateLimit({
       windowMs: 5 * 60 * 1000,
