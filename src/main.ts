@@ -14,8 +14,8 @@ async function bootstrap() {
   app.use(NoCache())
   app.use(
     rateLimit({
-      windowMs: 5 * 60 * 1000,
-      max: 100,
+      windowMs: 15 * 60 * 1000,
+      max: 150,
     })
   );
   app.enableCors({
